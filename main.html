@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SpectrAI 2026 — SIG RealitySpectra, VIT Pune</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+<style>
+
+:root{
+  --bg: #F6F7F9;
+  --surface: #FFFFFF;
+  --surface-2: #F2F3F6;
+  --border: #E4E6EB;
+  --border-strong: #D4D7DE;
+  --ink: #14161C;
+  --ink-soft: #565A66;
+  --ink-faint: #8A8E99;
+  --accent: #4F46E5;
+  --accent-ink: #FFFFFF;
+  --accent-soft: #EEEDFC;
+  --accent-soft-border: #D9D6F9;
+  --good: #0F9D58;
+  --good-soft: #E7F6ED;
+  --bad: #D93025;
+  --bad-soft: #FDECEA;
+  --radius: 10px;
+  --radius-lg: 14px;
+  --font-body: 'Inter', -apple-system, 'Segoe UI', sans-serif;
+  --font-display: 'Fraunces', 'Inter', serif;
+  --shadow-1: 0 1px 2px rgba(20,22,28,0.04), 0 1px 1px rgba(20,22,28,0.03);
+  --shadow-2: 0 4px 16px rgba(20,22,28,0.06), 0 1px 3px rgba(20,22,28,0.05);
+}
+
+[data-theme="dark"]{
+  --bg: #16171C;
+  --surface: #1E2027;
+  --surface-2: #24262E;
+  --border: #32343D;
+  --border-strong: #42444E;
+  --ink: #F2F3F6;
+  --ink-soft: #ADB0BB;
+  --ink-faint: #71747E;
+  --accent: #8B82F0;
+  --accent-ink: #14161C;
+  --accent-soft: #262445;
+  --accent-soft-border: #3B3776;
+  --good: #4ADE94;
+  --good-soft: #16321F;
+  --bad: #F0685F;
+  --bad-soft: #3A1D1B;
+  --shadow-1: 0 1px 2px rgba(0,0,0,0.3);
+  --shadow-2: 0 4px 20px rgba(0,0,0,0.35);
+}
+
+*{ margin:0; padding:0; box-sizing:border-box; }
+html{ scroll-behavior:smooth; }
+body{
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--ink);
+  transition: background .25s ease, color .25s ease;
+  -webkit-font-smoothing: antialiased;
+}
+a{ color:inherit; text-decoration:none; }
+ul{ list-style:none; }
+button{ font-family:inherit; cursor:pointer; border:none; background:none; }
+::selection{ background: var(--accent-soft-border); }
+
+.container{ max-width:1080px; margin:0 auto; padding:0 24px; }
+
+.eyebrow{
+  display:inline-flex; align-items:center; gap:8px;
+  font-size:.72rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase;
+  color: var(--accent); margin-bottom:10px;
+}
+.eyebrow .dot{ width:6px; height:6px; border-radius:50%; background: var(--accent); }
+
+.card{
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-1);
+}
+
+.pill{
+  display:inline-flex; align-items:center; gap:6px;
+  font-size:.72rem; font-weight:700; padding:4px 10px; border-radius:100px;
+}
+.pill-good{ background: var(--good-soft); color: var(--good); }
+.pill-accent{ background: var(--accent-soft); color: var(--accent); }
+
+/* ==========================================================
+   NAVBAR — flat, bordered, no floating glass pill
+   ========================================================== */
+.navbar{
+  position:sticky; top:0; z-index:1000;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+.navbar-inner{
+  display:flex; align-items:center; justify-content:space-between;
+  padding: 14px 0;
+}
+.brand{ display:flex; align-items:center; gap:10px; font-weight:800; font-size:.98rem; }
+.brand-mark{
+  width:30px; height:30px; border-radius:8px;
+  background: var(--accent); color: var(--accent-ink);
+  display:flex; align-items:center; justify-content:center; font-size:.85rem; flex-shrink:0;
+}
+.brand small{ display:block; font-size:.68rem; font-weight:500; color: var(--ink-faint); }
+
+.nav-links{ display:flex; align-items:center; gap:26px; }
+.nav-links a{ font-size:.86rem; font-weight:600; color: var(--ink-soft); transition: color .2s ease; }
+.nav-links a:hover{ color: var(--ink); }
+
+.nav-actions{ display:flex; align-items:center; gap:10px; }
+.theme-toggle{
+  width:34px; height:34px; border-radius:8px;
+  border:1px solid var(--border); color: var(--ink-soft);
+  display:flex; align-items:center; justify-content:center; font-size:.85rem;
+  transition: border-color .2s ease, color .2s ease;
+}
+.theme-toggle:hover{ border-color: var(--border-strong); color: var(--ink); }
+
+.btn{
+  font-weight:700; font-size:.85rem; border-radius:8px; padding:9px 16px;
+  display:inline-flex; align-items:center; gap:8px;
+  transition: transform .15s ease, background .2s ease, border-color .2s ease;
+}
+.btn-primary{ background: var(--accent); color: var(--accent-ink); }
+.btn-primary:hover{ transform: translateY(-1px); filter:brightness(1.05); }
+.btn-outline{ border:1px solid var(--border-strong); color: var(--ink); background: var(--surface); }
+.btn-outline:hover{ background: var(--surface-2); }
+
+.nav-hamburger{
+  display:none; width:34px; height:34px; border-radius:8px; border:1px solid var(--border);
+  align-items:center; justify-content:center; color: var(--ink);
+}
+.nav-links-mobile{
+  display:none; flex-direction:column; padding:6px 0 14px;
+  border-top:1px solid var(--border);
+}
+.nav-links-mobile.open{ display:flex; }
+.nav-links-mobile a{ padding:10px 4px; font-weight:600; font-size:.9rem; color: var(--ink); }
+
+/* ==========================================================
+   HERO — editorial split, numbered status line instead of glow orb
+   ========================================================== */
+.hero{ padding: 64px 0 56px; border-bottom:1px solid var(--border); }
+.hero-grid{ display:grid; grid-template-columns: 1.2fr .8fr; gap:48px; align-items:center; }
+
+.hero h1{
+  font-family: var(--font-display);
+  font-size: clamp(2.1rem, 4.2vw, 3.2rem);
+  font-weight:600; line-height:1.08; letter-spacing:-.01em;
+  margin-bottom:16px; color: var(--ink);
+}
+.hero h1 em{ font-style:italic; color: var(--accent); }
+.hero p.lead{ color: var(--ink-soft); font-size:1.02rem; line-height:1.65; max-width:480px; margin-bottom:26px; }
+.hero-cta-row{ display:flex; gap:12px; flex-wrap:wrap; margin-bottom:30px; }
+
+.hero-meta{ display:flex; flex-wrap:wrap; gap:0; border-top:1px solid var(--border); padding-top:18px; }
+.hero-meta-item{ padding-right:28px; margin-right:28px; border-right:1px solid var(--border); }
+.hero-meta-item:last-child{ border-right:none; margin-right:0; }
+.hero-meta-item .v{ font-weight:800; font-size:1rem; color: var(--ink); }
+.hero-meta-item .k{ font-size:.72rem; color: var(--ink-faint); font-weight:600; text-transform:uppercase; letter-spacing:.05em; margin-top:2px; }
+
+/* Right-hand "status card" replacing the orbiting-ring visual —
+   reads like a real product panel (ties to the stepper reference) */
+.hero-panel{ padding:22px; }
+.hero-panel-head{ display:flex; align-items:center; justify-content:between; gap:8px; margin-bottom:16px; }
+.hero-panel-title{ font-weight:700; font-size:.86rem; }
+.hero-steps{ display:flex; flex-direction:column; gap:0; }
+.hero-step{
+  display:flex; align-items:flex-start; gap:12px; padding:12px 0;
+  border-bottom:1px solid var(--border);
+}
+.hero-step:last-child{ border-bottom:none; padding-bottom:0; }
+.hero-step-dot{
+  width:22px; height:22px; border-radius:50%; flex-shrink:0; margin-top:1px;
+  display:flex; align-items:center; justify-content:center; font-size:.65rem; font-weight:800;
+}
+.hero-step.done .hero-step-dot{ background: var(--good-soft); color: var(--good); }
+.hero-step.active .hero-step-dot{ background: var(--accent); color: var(--accent-ink); }
+.hero-step.pending .hero-step-dot{ background: var(--surface-2); color: var(--ink-faint); border:1px solid var(--border-strong); }
+.hero-step-text b{ display:block; font-size:.85rem; font-weight:700; }
+.hero-step-text span{ font-size:.76rem; color: var(--ink-faint); }
+
+/* ==========================================================
+   EVENT DETAILS — table-like rows, not floating icon tiles
+   ========================================================== */
+.section{ padding: 56px 0; border-bottom:1px solid var(--border); }
+.section-head{ margin-bottom:32px; max-width:600px; }
+.section-head h2{ font-family: var(--font-display); font-size: clamp(1.5rem, 2.6vw, 2rem); font-weight:600; margin-bottom:8px; }
+.section-head p{ color: var(--ink-soft); font-size:.95rem; line-height:1.6; }
+
+.details-table{ border:1px solid var(--border); border-radius: var(--radius-lg); overflow:hidden; background: var(--surface); }
+.details-row{
+  display:grid; grid-template-columns: 220px 1fr; gap:20px;
+  padding:18px 22px; border-bottom:1px solid var(--border); align-items:center;
+}
+.details-row:last-child{ border-bottom:none; }
+.details-row .k{ display:flex; align-items:center; gap:10px; font-size:.82rem; font-weight:700; color: var(--ink-soft); }
+.details-row .k i{ color: var(--accent); width:16px; text-align:center; }
+.details-row .v{ font-size:.94rem; font-weight:600; color: var(--ink); }
+
+/* ==========================================================
+   COUNTDOWN — inline strip, tabular numerals, bordered cells
+   ========================================================== */
+.countdown-card{ padding:26px; display:flex; align-items:center; justify-content:space-between; gap:24px; flex-wrap:wrap; }
+.countdown-info b{ display:block; font-size:1.02rem; font-weight:700; margin-bottom:2px; }
+.countdown-info span{ font-size:.82rem; color: var(--ink-faint); }
+.countdown-grid{ display:flex; gap:10px; }
+.countdown-cell{
+  width:76px; text-align:center; padding:12px 4px; border-radius:8px;
+  border:1px solid var(--border); background: var(--surface-2);
+}
+.countdown-cell .num{ font-size:1.5rem; font-weight:800; font-variant-numeric: tabular-nums; color: var(--accent); line-height:1; }
+.countdown-cell .lbl{ font-size:.64rem; color: var(--ink-faint); font-weight:700; text-transform:uppercase; letter-spacing:.04em; margin-top:4px; }
+.countdown-started{ font-size:1.05rem; font-weight:800; color: var(--good); display:flex; align-items:center; gap:8px; }
+
+/* ==========================================================
+   REGISTRATION — grouped rows like a real checkout form
+   ========================================================== */
+.register-grid{ display:grid; grid-template-columns: 1fr .62fr; gap:28px; align-items:start; }
+
+.form-card{ padding:0; overflow:hidden; }
+.form-card-head{ padding:22px 26px; border-bottom:1px solid var(--border); }
+.form-card-head h3{ font-size:1.08rem; font-weight:800; margin-bottom:3px; }
+.form-card-head p{ font-size:.82rem; color: var(--ink-faint); }
+.form-card-body{ padding:22px 26px; }
+
+.form-group-label{
+  font-size:.72rem; font-weight:800; text-transform:uppercase; letter-spacing:.06em;
+  color: var(--ink-faint); margin: 18px 0 10px;
+}
+.form-group-label:first-child{ margin-top:0; }
+
+.field-row{ display:grid; grid-template-columns: 1fr; gap:14px; margin-bottom:14px; }
+.field-row.two{ grid-template-columns: 1fr 1fr; }
+
+.field label{
+  display:block; font-size:.78rem; font-weight:700; margin-bottom:6px; color: var(--ink);
+}
+.field label .opt{ color: var(--ink-faint); font-weight:500; }
+.field input, .field select{
+  width:100%; padding:11px 12px; border-radius:8px;
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+  color: var(--ink);
+  font-family:inherit; font-size:.9rem;
+  transition: border-color .2s ease, box-shadow .2s ease;
+}
+.field input::placeholder{ color: var(--ink-faint); }
+.field input:focus, .field select:focus{
+  outline:none; border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+.field select{ appearance:none; cursor:pointer;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%238A8E99' viewBox='0 0 16 16'><path d='M8 11L3 6h10z'/></svg>");
+  background-repeat:no-repeat; background-position: right 14px center;
+}
+.field.error input, .field.error select{ border-color: var(--bad); box-shadow: 0 0 0 3px var(--bad-soft); }
+.error-msg{
+  display:none; align-items:center; gap:6px;
+  color: var(--bad); font-size:.75rem; font-weight:600; margin-top:6px;
+}
+.field.error .error-msg{ display:flex; }
+
+.submit-btn{
+  width:100%; padding:13px; border-radius:8px; margin-top:8px;
+  background: var(--accent); color: var(--accent-ink);
+  font-weight:800; font-size:.92rem;
+  display:flex; align-items:center; justify-content:center; gap:8px;
+  transition: filter .2s ease, transform .15s ease;
+}
+.submit-btn:hover{ filter:brightness(1.06); transform: translateY(-1px); }
+.form-note{ font-size:.74rem; color: var(--ink-faint); margin-top:12px; text-align:center; }
+
+/* Side column */
+.side-col{ display:flex; flex-direction:column; gap:20px; }
+
+.seats-card{ padding:20px 22px; }
+.seats-top{ display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
+.seats-top .k{ font-size:.78rem; font-weight:700; color: var(--ink-soft); }
+.seats-num{ font-size:1.9rem; font-weight:800; line-height:1; }
+.seats-bar-track{ height:6px; border-radius:100px; background: var(--surface-2); overflow:hidden; }
+.seats-bar-fill{ height:100%; border-radius:100px; background: var(--accent); transition: width .5s ease; }
+.seats-footnote{ font-size:.74rem; color: var(--ink-faint); margin-top:10px; }
+
+.qr-card{ padding:22px; text-align:center; }
+.qr-card h4{ font-size:.94rem; font-weight:800; margin-bottom:3px; }
+.qr-card p{ font-size:.78rem; color: var(--ink-faint); margin-bottom:16px; }
+#qrcode-box{
+  display:inline-flex; padding:10px; border-radius:10px;
+  background:#fff; border:1px solid var(--border);
+}
+.qr-link{ display:block; margin-top:12px; font-size:.72rem; color: var(--ink-faint); word-break:break-all; }
+
+/* ==========================================================
+   FOOTER
+   ========================================================== */
+.footer{ padding: 40px 0 26px; }
+.footer-inner{ display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:24px; }
+.footer-brand p{ color: var(--ink-faint); font-size:.82rem; max-width:300px; margin-top:8px; line-height:1.6; }
+.footer-links{ display:flex; gap:48px; flex-wrap:wrap; }
+.footer-col h5{ font-size:.7rem; text-transform:uppercase; letter-spacing:.06em; color: var(--ink-faint); margin-bottom:10px; }
+.footer-col a{ display:block; font-size:.84rem; margin-bottom:8px; color: var(--ink-soft); }
+.footer-col a:hover{ color: var(--accent); }
+.footer-bottom{
+  display:flex; justify-content:space-between; padding-top:22px; margin-top:22px;
+  border-top:1px solid var(--border); font-size:.76rem; color: var(--ink-faint); flex-wrap:wrap; gap:8px;
+}
+
+/* ==========================================================
+   TOAST
+   ========================================================== */
+.toast{
+  position:fixed; top:20px; right:20px; z-index:3000;
+  min-width:300px; max-width:360px; padding:14px 16px; border-radius:10px;
+  background: var(--surface); border:1px solid var(--border); box-shadow: var(--shadow-2);
+  display:flex; align-items:flex-start; gap:10px;
+  transform: translateX(400px); opacity:0;
+  transition: transform .4s cubic-bezier(.2,.8,.3,1.1), opacity .25s ease;
+}
+.toast.show{ transform: translateX(0); opacity:1; }
+.toast i.toast-icon{ color: var(--good); font-size:1.1rem; margin-top:1px; }
+.toast .toast-text{ font-size:.84rem; line-height:1.4; }
+.toast .toast-close{ margin-left:auto; color: var(--ink-faint); font-size:.85rem; }
+
+/* ==========================================================
+   RESPONSIVE
+   ========================================================== */
+@media (max-width: 960px){
+  .nav-links{ display:none; }
+  .nav-hamburger{ display:flex; }
+  .hero-grid{ grid-template-columns:1fr; }
+  .register-grid{ grid-template-columns:1fr; }
+  .details-row{ grid-template-columns: 1fr; gap:4px; }
+}
+@media (max-width: 560px){
+  .container{ padding:0 16px; }
+  .hero{ padding:36px 0 40px; }
+  .hero-cta-row{ flex-direction:column; }
+  .hero-cta-row .btn{ justify-content:center; width:100%; }
+  .field-row.two{ grid-template-columns:1fr; }
+  .countdown-card{ flex-direction:column; align-items:flex-start; }
+  .countdown-cell{ width:64px; }
+  .form-card-head, .form-card-body{ padding:18px; }
+  .footer-links{ gap:28px; }
+  .toast{ left:14px; right:14px; min-width:unset; max-width:unset; }
+  .hero-meta{ gap:14px 0; }
+  .hero-meta-item{ padding-right:16px; margin-right:16px; }
+}
+
+@media (prefers-reduced-motion: reduce){
+  *{ animation-duration:.001ms !important; transition-duration:.001ms !important; }
+  html{ scroll-behavior:auto; }
+}
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible{
+  outline: 2px solid var(--accent); outline-offset:2px;
+}
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="container navbar-inner">
+    <div class="brand">
+      <div class="brand-mark"><i class="fa-solid fa-vr-cardboard"></i></div>
+      <div>SIG · RealitySpectra<small>VIT Pune, AR/VR Chapter</small></div>
+    </div>
+
+    <ul class="nav-links">
+      <li><a href="#details">Event</a></li>
+      <li><a href="#countdown">Countdown</a></li>
+      <li><a href="#register">Register</a></li>
+      <li><a href="#qr">QR Pass</a></li>
+    </ul>
+
+    <div class="nav-actions">
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark and light theme">
+        <i class="fa-solid fa-moon" id="themeIcon"></i>
+      </button>
+      <a href="#register" class="btn btn-primary">Register</a>
+      <button class="nav-hamburger" id="hamburgerBtn" aria-label="Open menu">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+    </div>
+  </div>
+  <div class="container">
+    <ul class="nav-links-mobile" id="mobileNav">
+      <li><a href="#details">Event Details</a></li>
+      <li><a href="#countdown">Countdown</a></li>
+      <li><a href="#register">Register</a></li>
+      <li><a href="#qr">QR Pass</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="container hero-grid">
+    <div>
+      <div class="eyebrow"><span class="dot"></span> SIG · RealitySpectra Presents</div>
+      <h1>Spectr<em>AI</em> 2026</h1>
+      <p class="lead"></p>
+
+      <div class="hero-cta-row">
+        <a href="#register" class="btn btn-primary"><i class="fa-solid fa-arrow-right"></i> Register now</a>
+        <a href="#details" class="btn btn-outline">See event details</a>
+      </div>
+
+      <div class="hero-meta">
+        <div class="hero-meta-item"><div class="v" id="heroSeats">100</div><div class="k">Seats left</div></div>
+        <div class="hero-meta-item"><div class="v">15 Oct</div><div class="k">2026 · 2:00 PM IST</div></div>
+        <div class="hero-meta-item"><div class="v">Main Auditorium</div><div class="k">VIT Pune</div></div>
+      </div>
+    </div>
+
+    <!-- Status panel — signature element in place of a generic hero graphic -->
+    <div class="hero-panel card">
+      <div class="hero-panel-head">
+        <span class="hero-panel-title">Registration status</span>
+        <span class="pill pill-accent">Open</span>
+      </div>
+      <div class="hero-steps">
+        <div class="hero-step done">
+          <div class="hero-step-dot"><i class="fa-solid fa-check"></i></div>
+          <div class="hero-step-text"><b>Applications open</b><span>Rolling since 1 Sep 2026</span></div>
+        </div>
+        <div class="hero-step active">
+          <div class="hero-step-dot">2</div>
+          <div class="hero-step-text"><b>Confirm your seat</b><span>Form below, takes under a minute</span></div>
+        </div>
+        <div class="hero-step pending">
+          <div class="hero-step-dot">3</div>
+          <div class="hero-step-text"><b>Entry pass by email</b><span>Sent instantly after registration</span></div>
+        </div>
+        <div class="hero-step pending">
+          <div class="hero-step-dot">4</div>
+          <div class="hero-step-text"><b>SpectrAI 2026</b><span>15 Oct, Main Auditorium</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- EVENT DETAILS -->
+<section class="section" id="details">
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow"><span class="dot"></span> Event details</div>
+      <h2>What you're signing up for</h2>
+      <p>SpectrAI 2026 brings together AI and AR/VR practitioners for a focused afternoon of talks, demos, and networking.</p>
+    </div>
+
+    <div class="details-table">
+      <div class="details-row"><div class="k"><i class="fa-solid fa-heading"></i> Title</div><div class="v">SpectrAI 2026</div></div>
+      <div class="details-row"><div class="k"><i class="fa-solid fa-align-left"></i> Description</div><div class="v">An industry dialogue spotlighting AI-powered AR/VR development</div></div>
+      <div class="details-row"><div class="k"><i class="fa-solid fa-calendar-days"></i> Date</div><div class="v">15th October 2026</div></div>
+      <div class="details-row"><div class="k"><i class="fa-solid fa-clock"></i> Time</div><div class="v">2:00 PM IST</div></div>
+      <div class="details-row"><div class="k"><i class="fa-solid fa-location-dot"></i> Venue</div><div class="v">VIT Pune — Main Auditorium</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- COUNTDOWN -->
+<section class="section" id="countdown">
+  <div class="container">
+    <div class="countdown-card card">
+      <div class="countdown-info">
+        <b>Event starts in</b>
+        <span>15 Oct 2026, 2:00 PM IST</span>
+      </div>
+      <div class="countdown-grid" id="countdownGrid">
+        <div class="countdown-cell"><div class="num" id="cd-days">--</div><div class="lbl">Days</div></div>
+        <div class="countdown-cell"><div class="num" id="cd-hours">--</div><div class="lbl">Hrs</div></div>
+        <div class="countdown-cell"><div class="num" id="cd-mins">--</div><div class="lbl">Min</div></div>
+        <div class="countdown-cell"><div class="num" id="cd-secs">--</div><div class="lbl">Sec</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REGISTRATION -->
+<section class="section" id="register" style="border-bottom:none;">
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow"><span class="dot"></span> Registration</div>
+      <h2>Reserve your seat</h2>
+      <p>Fill in your details below. A confirmation lands in your inbox right after.</p>
+    </div>
+
+    <div class="register-grid">
+
+      <div class="form-card card">
+        <div class="form-card-head">
+          <h3>Attendee details</h3>
+          <p>All fields marked required must be filled before submitting.</p>
+        </div>
+
+        <form id="registerForm" novalidate class="form-card-body">
+
+          <div class="form-group-label">Contact information</div>
+          <div class="field-row">
+            <div class="field" id="field-name">
+              <label for="fullName">Full name</label>
+              <input type="text" id="fullName" name="fullName" placeholder="e.g. Om Ghotekar" autocomplete="name">
+              <div class="error-msg"><i class="fa-solid fa-circle-exclamation"></i><span>Name must be at least 2 characters.</span></div>
+            </div>
+          </div>
+          <div class="field-row two">
+            <div class="field" id="field-email">
+              <label for="email">Email address</label>
+              <input type="email" id="email" name="email" placeholder="you@domain.com" autocomplete="email">
+              <div class="error-msg"><i class="fa-solid fa-circle-exclamation"></i><span>Enter a valid email address.</span></div>
+            </div>
+            <div class="field" id="field-phone">
+              <label for="phone">Phone <span class="opt">(optional)</span></label>
+              <input type="text" id="phone" name="phone" placeholder="98765 43210" autocomplete="tel">
+            </div>
+          </div>
+
+          <div class="form-group-label">Academic details</div>
+          <div class="field-row">
+            <div class="field" id="field-year">
+              <label for="yearOfStudy">Year of study</label>
+              <select id="yearOfStudy" name="yearOfStudy">
+                <option value="" selected disabled>Select your year</option>
+                <option value="FE">First Year (FE)</option>
+                <option value="SE">Second Year (SE)</option>
+                <option value="TE">Third Year (TE)</option>
+                <option value="BE">Final Year (BE)</option>
+              </select>
+              <div class="error-msg"><i class="fa-solid fa-circle-exclamation"></i><span>Please select your year of study.</span></div>
+            </div>
+          </div>
+
+          <button type="submit" class="submit-btn">
+            <i class="fa-solid fa-paper-plane"></i> Register now
+          </button>
+          <p class="form-note">By registering, you agree to receive event updates via email.</p>
+        </form>
+      </div>
+
+      <div class="side-col">
+        <div class="seats-card card">
+          <div class="seats-top">
+            <span class="k">Seats left</span>
+            <span class="pill pill-good"><i class="fa-solid fa-circle-check"></i> Filling fast</span>
+          </div>
+          <div class="seats-num" id="seatsNum">100</div>
+          <div class="seats-bar-track" style="margin-top:12px;"><div class="seats-bar-fill" id="seatsBarFill" style="width:100%;"></div></div>
+          <p class="seats-footnote">Out of 100 total seats for SpectrAI 2026.</p>
+        </div>
+
+        <div class="qr-card card" id="qr">
+          <h4>Scan to register</h4>
+          <p>Point your camera at the code for a quick mobile link.</p>
+          <div id="qrcode-box"></div>
+          <span class="qr-link">https://sig.vitpune.in/spectrai/register</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="brand">
+          <div class="brand-mark"><i class="fa-solid fa-vr-cardboard"></i></div>
+          SIG · RealitySpectra
+        </div>
+        <p>The AR/VR Special Interest Group at Vishwakarma Institute of Technology, Pune.</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <h5>Event</h5>
+          <a href="#details">Details</a>
+          <a href="#countdown">Countdown</a>
+          <a href="#register">Register</a>
+        </div>
+        <div class="footer-col">
+          <h5>Chapter</h5>
+          <a href="#">About SIG</a>
+          <a href="#">Past events</a>
+          <a href="#">Contact</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 SIG – RealitySpectra, VIT Pune.</span>
+      <span>Built by the AR/VR chapter</span>
+    </div>
+  </div>
+</footer>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <i class="fa-solid fa-circle-check toast-icon"></i>
+  <div class="toast-text" id="toastText"></div>
+  <button class="toast-close" id="toastClose" aria-label="Dismiss"><i class="fa-solid fa-xmark"></i></button>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* THEME TOGGLE (light default — dark is the opt-in alternate) */
+  const root = document.documentElement;
+  const themeToggle = document.getElementById('themeToggle');
+  const themeIcon = document.getElementById('themeIcon');
+
+  function applyTheme(theme){
+    if(theme === 'dark'){
+      root.setAttribute('data-theme', 'dark');
+      themeIcon.classList.remove('fa-moon'); themeIcon.classList.add('fa-sun');
+    } else {
+      root.removeAttribute('data-theme');
+      themeIcon.classList.remove('fa-sun'); themeIcon.classList.add('fa-moon');
+    }
+  }
+  const savedTheme = localStorage.getItem('spectrai-theme') || 'light';
+  applyTheme(savedTheme);
+  themeToggle.addEventListener('click', function(){
+    const isDark = root.getAttribute('data-theme') === 'dark';
+    const next = isDark ? 'light' : 'dark';
+    applyTheme(next);
+    localStorage.setItem('spectrai-theme', next);
+  });
+
+  /* MOBILE NAV */
+  const hamburgerBtn = document.getElementById('hamburgerBtn');
+  const mobileNav = document.getElementById('mobileNav');
+  hamburgerBtn.addEventListener('click', function(){
+    mobileNav.classList.toggle('open');
+    const icon = hamburgerBtn.querySelector('i');
+    icon.classList.toggle('fa-bars'); icon.classList.toggle('fa-xmark');
+  });
+  mobileNav.querySelectorAll('a').forEach(function(link){
+    link.addEventListener('click', function(){
+      mobileNav.classList.remove('open');
+      hamburgerBtn.querySelector('i').classList.add('fa-bars');
+      hamburgerBtn.querySelector('i').classList.remove('fa-xmark');
+    });
+  });
+
+  /* COUNTDOWN */
+  const EVENT_DATE = new Date("2026-10-15T14:00:00+05:30");
+  const cdDays = document.getElementById('cd-days');
+  const cdHours = document.getElementById('cd-hours');
+  const cdMins = document.getElementById('cd-mins');
+  const cdSecs = document.getElementById('cd-secs');
+  const countdownGrid = document.getElementById('countdownGrid');
+  function pad(n){ return String(n).padStart(2,'0'); }
+  function updateCountdown(){
+    const diff = EVENT_DATE.getTime() - Date.now();
+    if(diff <= 0){
+      countdownGrid.innerHTML = '<div class="countdown-started"><i class="fa-solid fa-rocket"></i> Event started!</div>';
+      clearInterval(countdownInterval);
+      return;
+    }
+    const days = Math.floor(diff / 86400000);
+    const hours = Math.floor((diff % 86400000) / 3600000);
+    const mins = Math.floor((diff % 3600000) / 60000);
+    const secs = Math.floor((diff % 60000) / 1000);
+    cdDays.textContent = pad(days); cdHours.textContent = pad(hours);
+    cdMins.textContent = pad(mins); cdSecs.textContent = pad(secs);
+  }
+  updateCountdown();
+  const countdownInterval = setInterval(updateCountdown, 1000);
+
+  /* QR CODE */
+  new QRCode(document.getElementById("qrcode-box"), {
+    text: "https://sig.vitpune.in/spectrai/register",
+    width: 132, height: 132,
+    colorDark: "#14161C", colorLight: "#ffffff",
+    correctLevel: QRCode.CorrectLevel.H
+  });
+
+  /* SEAT COUNTER */
+  const TOTAL_SEATS = 100;
+  let seatsLeft = TOTAL_SEATS;
+  const seatsNumEl = document.getElementById('seatsNum');
+  const heroSeatsEl = document.getElementById('heroSeats');
+  const seatsBarFill = document.getElementById('seatsBarFill');
+  function updateSeatsDisplay(){
+    seatsNumEl.textContent = seatsLeft;
+    heroSeatsEl.textContent = seatsLeft;
+    seatsBarFill.style.width = Math.max(0, (seatsLeft / TOTAL_SEATS) * 100) + '%';
+    seatsNumEl.style.color = seatsLeft <= 10 ? 'var(--bad)' : '';
+  }
+  function decrementSeats(){ if(seatsLeft > 0){ seatsLeft -= 1; updateSeatsDisplay(); } }
+
+  /* TOAST */
+  const toast = document.getElementById('toast');
+  const toastText = document.getElementById('toastText');
+  const toastClose = document.getElementById('toastClose');
+  let toastTimeout;
+  function showToast(message){
+    toastText.textContent = message;
+    toast.classList.add('show');
+    clearTimeout(toastTimeout);
+    toastTimeout = setTimeout(function(){ toast.classList.remove('show'); }, 5000);
+  }
+  toastClose.addEventListener('click', function(){ toast.classList.remove('show'); clearTimeout(toastTimeout); });
+
+  /* FORM VALIDATION */
+  const form = document.getElementById('registerForm');
+  const nameInput = document.getElementById('fullName');
+  const emailInput = document.getElementById('email');
+  const yearSelect = document.getElementById('yearOfStudy');
+  const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  function setFieldError(id, hasError){
+    document.getElementById(id).classList.toggle('error', hasError);
+  }
+  function validateForm(){
+    let valid = true;
+    const nameVal = nameInput.value.trim();
+    if(nameVal.length < 2){ setFieldError('field-name', true); valid = false; } else setFieldError('field-name', false);
+
+    const emailVal = emailInput.value.trim();
+    if(!EMAIL_REGEX.test(emailVal)){ setFieldError('field-email', true); valid = false; } else setFieldError('field-email', false);
+
+    if(!yearSelect.value){ setFieldError('field-year', true); valid = false; } else setFieldError('field-year', false);
+    return valid;
+  }
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    if(!validateForm()) return;
+    const registrantName = nameInput.value.trim();
+    decrementSeats();
+    showToast('✅ Registration successful, ' + registrantName + '! Check your email.');
+    form.reset();
+    ['field-name','field-email','field-year'].forEach(function(id){ setFieldError(id, false); });
+  });
+
+  nameInput.addEventListener('input', function(){ if(nameInput.value.trim().length >= 2) setFieldError('field-name', false); });
+  emailInput.addEventListener('input', function(){ if(EMAIL_REGEX.test(emailInput.value.trim())) setFieldError('field-email', false); });
+  yearSelect.addEventListener('change', function(){ if(yearSelect.value) setFieldError('field-year', false); });
+
+  updateSeatsDisplay();
+})();
+</script>
+</body>
+</html>
